@@ -79,6 +79,9 @@ require("lazy").setup({
 				lua = { "luacheck" },
 				yaml = { "yamllint" },
 				toml = { "taplo" },
+				bash = { "shellcheck" },
+				sh = { "shellcheck" },
+				zsh = { "shellcheck" },
 			}
 
 			vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
@@ -109,6 +112,9 @@ require("lazy").setup({
 					json = { "prettier" },
 					yaml = { "prettier" },
 					toml = { "taplo" },
+					bash = { "shfmt" },
+					sh = { "shfmt" },
+					zsh = { "shfmt" },
 				},
 				format_on_save = {
 					timeout_ms = 3000,
@@ -277,5 +283,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+	end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "rust", "lua", "yaml", "toml", "json", "bash", "sh", "zsh" },
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
 	end,
 })
