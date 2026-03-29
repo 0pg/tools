@@ -42,6 +42,7 @@ require_cmd xattr
 require_cmd ln
 require_cmd mkdir
 require_cmd rm
+require_cmd brew
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
   fail "이 스크립트는 macOS 전용이다."
@@ -93,6 +94,13 @@ if ! grep -Fq 'export PATH="$HOME/.local/bin:$PATH"' "$PROFILE_FILE" 2>/dev/null
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
+
+log "shellcheck 설치"
+if ! command -v shellcheck >/dev/null 2>&1; then
+  brew install shellcheck
+else
+  log "shellcheck 이미 설치됨: $(shellcheck --version | head -n 2 | tail -n 1)"
+fi
 
 log "설치 확인"
 "$BIN_DIR/nvim" --version | head -n 5
